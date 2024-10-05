@@ -1,0 +1,8 @@
+.btn-hover:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.dropdown-hover:hover {
+  background-color: #f8717130;
+}
