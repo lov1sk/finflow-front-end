@@ -7,12 +7,18 @@ export const apiClient = axios.create({
   timeout: 10 * 1000, // 10 seconds
 });
 
-checkAuthentication().then((res) => {
-  const jwtToken = getToken()?.value;
-  if (jwtToken && res) {
-    apiClient.defaults.headers.common.Authorization = `Bearer ${jwtToken}`;
-  }
-});
+checkAuthentication()
+  .then((res) => {
+    const jwtToken = getToken()?.value;
+    if (jwtToken && res) {
+      apiClient.defaults.headers.common.Authorization = `Bearer ${jwtToken}`;
+    } else {
+      apiClient.defaults.headers.common.Authorization = null;
+    }
+  })
+  .catch(() => {
+    apiClient.defaults.headers.common.Authorization = null;
+  });
 
 export async function HttpGET<T>(url: string): Promise<T> {
   await checkAuthentication();

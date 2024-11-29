@@ -5,30 +5,35 @@ import { transactionsTypeMapper } from "@/app/utils/mappers/transactions-type-ma
 import { TableComponent } from "@/components/table";
 import { Transaction, TransactionType } from "@/types/transaction";
 import { Box, Modal, TableCell, TableRow, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PaginationComponent from "@/components/pagination";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { TransactionDetailsModal } from "./transaction-details-modal";
+import { NoTransactionsMessage } from "./no-transactions-message";
 
 interface TransactionTableProps {
   page: number;
   lastPage: number;
   transactions: Transaction[];
+  error?: boolean;
+  errorMessage?: string;
 }
 export function TransactionTable({
   transactions,
   lastPage,
   page,
+  error,
+  errorMessage,
 }: TransactionTableProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [removeTransactionModalOpen, setRemoveTransactionModalOpen] =
-    useState<boolean>(false);
+  const transactionDetailsModalRef = useRef(null);
 
   const [currentPage, setCurrentPage] = useState<number>(page);
-
+  const [removeTransactionModalOpen, setRemoveTransactionModalOpen] =
+    useState<boolean>(false);
   const [transactionToRemove, setTransactionToRemove] = useState<
     Transaction | undefined
   >(undefined);
@@ -114,6 +119,10 @@ export function TransactionTable({
     </TableRow>
   ));
 
+  if (!transactions || transactions.length === 0) {
+    return <NoTransactionsMessage />;
+  }
+
   return (
     <>
       <TableComponent
@@ -157,6 +166,7 @@ export function TransactionTable({
         aria-describedby="modal-modal-description"
       >
         <TransactionDetailsModal
+          ref={transactionDetailsModalRef}
           onClose={() => setRemoveTransactionModalOpen(false)}
           transaction={transactionToRemove}
         />

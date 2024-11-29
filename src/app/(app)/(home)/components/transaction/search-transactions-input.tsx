@@ -2,7 +2,7 @@
 
 import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import { Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NewTransactionModal } from "./new-transaction-modal";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
@@ -10,6 +10,8 @@ export function SearchTransactionsInput() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
+  const newTransactionModalRef = useRef(null);
 
   const [searchValue, setSearchValue] = useState<string | undefined>(undefined);
   const [openNewTransactionModal, setOpenTransactionModal] =
@@ -20,6 +22,7 @@ export function SearchTransactionsInput() {
     params.set("query", searchValue ?? "");
     router.replace(`${pathname}?${params.toString()}`);
   }, [searchValue]);
+
   return (
     <Box
       sx={{
@@ -58,10 +61,13 @@ export function SearchTransactionsInput() {
       <Modal
         open={openNewTransactionModal}
         onClose={() => setOpenTransactionModal(false)}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        aria-labelledby="new-transaction-modal"
+        aria-describedby="modal-for-create-new-transaction"
       >
-        <NewTransactionModal onClose={() => setOpenTransactionModal(false)} />
+        <NewTransactionModal
+          ref={newTransactionModalRef}
+          onClose={() => setOpenTransactionModal(false)}
+        />
       </Modal>
     </Box>
   );

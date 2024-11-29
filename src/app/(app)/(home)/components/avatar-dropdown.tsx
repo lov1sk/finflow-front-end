@@ -11,14 +11,16 @@ import {
   Typography,
 } from "@mui/material";
 import { ChevronDown, LogOut } from "lucide-react";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { UserProfileModal } from "./user-modal/user-profile-modal";
 import { User } from "@/types/user";
 
 interface AvatarDropdownProps {
-  user: User;
+  user?: User;
 }
 export function AvatarDropdown({ user }: AvatarDropdownProps) {
+  const userModalRef = useRef(null);
+
   const [openProfileModal, setOpenProfileModal] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -43,7 +45,7 @@ export function AvatarDropdown({ user }: AvatarDropdownProps) {
         }}
       >
         <Avatar
-          {...stringAvatar(user.name)}
+          {...stringAvatar(user?.name)}
           sx={{
             bgcolor: "#181818",
             color: "#71717A",
@@ -60,7 +62,7 @@ export function AvatarDropdown({ user }: AvatarDropdownProps) {
             fontWeight: "bold",
           }}
         >
-          {user.name}
+          {user?.name}
         </Typography>
         <ChevronDown
           strokeWidth={2.5}
@@ -114,6 +116,7 @@ export function AvatarDropdown({ user }: AvatarDropdownProps) {
         aria-describedby="modal-modal-description"
       >
         <UserProfileModal
+          ref={userModalRef}
           user={user}
           onClose={() => setOpenProfileModal(false)}
         />

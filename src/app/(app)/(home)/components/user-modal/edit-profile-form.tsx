@@ -22,7 +22,7 @@ const editProfileFormSchema = z.object({
 export type EditProfileFormSchema = z.infer<typeof editProfileFormSchema>;
 
 interface EditProfileFormProps {
-  user: User;
+  user?: User;
   closeForm: () => void;
 }
 
@@ -31,9 +31,6 @@ export function EditProfileForm({ closeForm, user }: EditProfileFormProps) {
   const [editUserErrorMessage, setEditUserErrorMessage] = useState<
     string | undefined
   >(undefined);
-
-  // const user = await getProfile();
-  console.log(user);
 
   const formMethods = useForm<EditProfileFormSchema>({
     resolver: zodResolver(editProfileFormSchema),

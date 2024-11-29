@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, Button } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { DateInput } from "@/components/date-input";
 import { useRouter } from "next/navigation";
@@ -30,113 +30,116 @@ type NewTransactionFormSchema = z.infer<typeof newTransactionFormSchema>;
 interface NewTransactionModalProps {
   onClose: () => void;
 }
-export function NewTransactionModal({ onClose }: NewTransactionModalProps) {
-  const router = useRouter();
 
-  const [categories, setCategories] = useState<string[]>([]);
+export const NewTransactionModal = forwardRef(
+  ({ onClose }: NewTransactionModalProps, ref) => {
+    const router = useRouter();
 
-  const formMethods = useForm<NewTransactionFormSchema>({
-    resolver: zodResolver(newTransactionFormSchema),
-    defaultValues: {
-      date: dayjs(new Date()) as any,
-      description: "",
-      category: "",
-      value: 0,
-      typeTransaction: "",
-    },
-  });
+    const [categories, setCategories] = useState<string[]>([]);
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = formMethods;
+    const formMethods = useForm<NewTransactionFormSchema>({
+      resolver: zodResolver(newTransactionFormSchema),
+      defaultValues: {
+        date: dayjs(new Date()) as any,
+        description: "",
+        category: "",
+        value: 0,
+        typeTransaction: "",
+      },
+    });
 
-  const handleSaveNewTransaction = async (
-    payload: NewTransactionFormSchema
-  ) => {
-    const response = await createTransaction(payload);
-    if (response.error) {
-      // return setCreateNewTransactionError(response.errorMessage);
-    }
-    router.refresh();
-    onClose();
-  };
+    const {
+      control,
+      handleSubmit,
+      formState: { errors, isSubmitting },
+    } = formMethods;
 
-  const getCategories = async () => {
-    const response = await getTransactionsCategories();
-    if (response.success) {
-      console.log({ categories: response?.data?.categories });
+    const handleSaveNewTransaction = async (
+      payload: NewTransactionFormSchema
+    ) => {
+      const response = await createTransaction(payload);
+      if (response.error) {
+        // return setCreateNewTransactionError(response.errorMessage);
+      }
+      router.refresh();
+      onClose();
+    };
 
-      setCategories(response?.data?.categories ?? []);
-    }
-  };
+    const getCategories = async () => {
+      const response = await getTransactionsCategories();
+      if (response.success) {
+        console.log({ categories: response?.data?.categories });
 
-  useEffect(() => {
-    getCategories();
-  }, []);
+        setCategories(response?.data?.categories ?? []);
+      }
+    };
 
-  return (
-    <BaseModal title="Nova Transação" onClose={onClose}>
-      <form
-        onSubmit={handleSubmit(handleSaveNewTransaction)}
-        style={{ display: "flex", flexDirection: "column", gap: "24px" }}
-      >
-        <DateInput
-          name="date"
-          control={control}
-          error={errors.date}
-          label="Data da transação"
-        />
-        <TextInput
-          sx={{
-            backgroundColor: "#121214",
-            borderRadius: "4px",
-          }}
-          control={control}
-          name="description"
-          placeholder="Insira uma descrição"
-          label="Descrição da transação"
-          error={errors.description}
-        />
-        <CurrencyInput
-          label="Valor R$"
-          control={control}
-          name="value"
-          error={errors.value}
-        />
-        <SelectInput
-          id="category"
-          control={control}
-          name="category"
-          label="Categoria"
-          error={errors.category}
-          options={categories.map((cat, index) => ({
-            label: cat,
-            value: cat,
-            key: index,
-          }))}
-        />
-        <RadioSelect
-          name="typeTransaction"
-          control={control}
-          error={errors.typeTransaction}
-          options={[
-            {
-              value: "credit",
-              label: "Entrada",
-            },
-            {
-              value: "debit",
-              label: "Saída",
-            },
-          ]}
-        />
+    useEffect(() => {
+      getCategories();
+    }, []);
 
-        <Button type="submit" variant="contained" disabled={isSubmitting}>
-          Cadastrar
-        </Button>
-      </form>
-    </BaseModal>
-  );
-}
+    return (
+      <BaseModal title="Nova Transação" onClose={onClose}>
+        <form
+          onSubmit={handleSubmit(handleSaveNewTransaction)}
+          style={{ display: "flex", flexDirection: "column", gap: "24px" }}
+        >
+          <DateInput
+            name="date"
+            control={control}
+            error={errors.date}
+            label="Data da transação"
+          />
+          <TextInput
+            sx={{
+              backgroundColor: "#121214",
+              borderRadius: "4px",
+            }}
+            control={control}
+            name="description"
+            placeholder="Insira uma descrição"
+            label="Descrição da transação"
+            error={errors.description}
+          />
+          <CurrencyInput
+            label="Valor R$"
+            control={control}
+            name="value"
+            error={errors.value}
+          />
+          <SelectInput
+            id="category"
+            control={control}
+            name="category"
+            label="Categoria"
+            error={errors.category}
+            options={categories.map((cat, index) => ({
+              label: cat,
+              value: cat,
+              key: index,
+            }))}
+          />
+          <RadioSelect
+            name="typeTransaction"
+            control={control}
+            error={errors.typeTransaction}
+            options={[
+              {
+                value: "credit",
+                label: "Entrada",
+              },
+              {
+                value: "debit",
+                label: "Saída",
+              },
+            ]}
+          />
+
+          <Button type="submit" variant="contained" disabled={isSubmitting}>
+            Cadastrar
+          </Button>
+        </form>
+      </BaseModal>
+    );
+  }
+);

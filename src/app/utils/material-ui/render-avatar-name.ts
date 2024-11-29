@@ -17,8 +17,9 @@ function stringToColor(string: string) {
 
   return color;
 }
-export function stringAvatar(name: string) {
+export function stringAvatar(name?: string) {
   let children;
+  if (!name) return;
   if (name.split(" ").length > 1) {
     children = `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`;
   } else {

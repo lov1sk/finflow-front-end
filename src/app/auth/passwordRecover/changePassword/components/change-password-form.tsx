@@ -91,8 +91,10 @@ export function ChangePasswordForm({ token, email }: ChangePasswordFormProps) {
         error={errors.confirmPassword}
         placeholder="Digite a confimação da sua senha"
       />
+
       {successMessage && <Alert severity="success">{successMessage}</Alert>}
       {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+
       <Button
         fullWidth
         variant="contained"

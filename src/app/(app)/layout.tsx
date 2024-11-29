@@ -10,12 +10,12 @@ export default async function AppLayout({
   children: React.ReactNode;
 }>) {
   const isAuthenticated = await checkAuthentication();
-  console.log({ isAuthenticated });
 
   if (!isAuthenticated) redirect("/auth/login");
 
   return (
     <main
+      aria-hidden={false}
       style={{
         width: "100vw",
         minHeight: "100vh",

@@ -14,7 +14,22 @@
   background-color: #f8717130;
 }
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
+}
+/* Estiliza apenas a barra de rolagem horizontal */
+::-webkit-scrollbar:horizontal {
+  height: 4px; /* Altura da barra horizontal */
+}
+
+/* Estiliza o indicador (thumb) da barra horizontal */
+::-webkit-scrollbar-thumb:horizontal {
+  background-color: rgba(34, 34, 34, 0.3); /* Cor com transparência */
+  border-radius: 10px; /* Arredonda as bordas */
+}
+
+/* Estiliza a pista (track) da barra horizontal */
+::-webkit-scrollbar-track:horizontal {
+  background-color: rgba(17, 17, 17, 0.1); /* Cor com transparência */
 }
 
 /* Define a cor do indicador da barra de rolagem */

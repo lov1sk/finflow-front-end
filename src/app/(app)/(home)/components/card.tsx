@@ -29,6 +29,7 @@ export function Card({ title, value, icon, variant }: CardProps) {
         paddingY: "24px",
         paddingX: "32px",
         display: "flex",
+        minWidth: "350px",
         height: "120px",
         flexDirection: "column",
         justifyContent: "space-between",

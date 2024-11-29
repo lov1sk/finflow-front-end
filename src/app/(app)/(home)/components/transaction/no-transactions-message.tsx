@@ -4,7 +4,7 @@ import { Plus } from "lucide-react";
 import { NewTransactionModal } from "./new-transaction-modal";
 import React, { useState } from "react";
 import NoDataIcon from "@/assets/no-data-icon";
-export function NoTransactionsErrorMessage() {
+export function NoTransactionsMessage() {
   const [openNewTransactionModal, setOpenTransactionModal] =
     useState<boolean>(false);
   return (
