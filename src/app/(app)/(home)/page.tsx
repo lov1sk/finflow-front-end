@@ -1,20 +1,33 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Card } from "./components/card";
 import Grid from "@mui/material/Grid2";
 import { ArrowDownCircle, ArrowUpCircle, DollarSign } from "lucide-react";
-import { SearchTransactionsInput } from "./components/search-transactions-input";
+import { SearchTransactionsInput } from "./components/transaction/search-transactions-input";
+import { TransactionTable } from "./components/transaction/transactions-table";
+import { getTransactions } from "@/http/transactions/get-transactions";
 
-export default function HomePage() {
-  const username = "Lucas Ribeiro";
-  const entryBalance = 17400;
-  const outingBalance = 1259;
-  const balance = 16141;
+interface HomePageProps {
+  searchParams?: Promise<{
+    page?: string;
+    query?: string;
+  }>;
+}
+
+export const revalidate = 100;
+export default async function HomePage(props: HomePageProps) {
+  const searchParams = await props.searchParams;
+  const { data, error, success, errorMessage } = await getTransactions({
+    page: searchParams?.page,
+    limit: 10,
+    description: searchParams?.query,
+  });
 
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
+        paddingBottom: "40px",
         gap: "40px",
       }}
     >
@@ -22,14 +35,14 @@ export default function HomePage() {
         {/**Header Cards */}
         <Grid
           container
-          spacing={4}
+          spacing={8}
           sx={{
             marginTop: "40px",
           }}
         >
           <Card
             title="Entradas"
-            value={entryBalance}
+            value={data?.creditTransactionsAmount}
             icon={
               <ArrowUpCircle
                 style={{
@@ -40,7 +53,7 @@ export default function HomePage() {
           />
           <Card
             title="Saídas"
-            value={outingBalance}
+            value={data?.debitTransactionsAmount}
             icon={
               <ArrowDownCircle
                 style={{
@@ -51,7 +64,7 @@ export default function HomePage() {
           />
           <Card
             title="Saldo"
-            value={balance}
+            value={data?.transactionsAmount}
             variant="green-filled"
             icon={
               <DollarSign
@@ -64,6 +77,11 @@ export default function HomePage() {
         </Grid>
       </Box>
       <SearchTransactionsInput />
+      <TransactionTable
+        transactions={data?.data ?? []}
+        lastPage={data?.lastPage ?? 1}
+        page={data?.page ?? 1}
+      />
     </Box>
   );
 }

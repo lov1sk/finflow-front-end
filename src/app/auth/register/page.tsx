@@ -18,7 +18,7 @@ export default function RegisterPage() {
       <Typography variant="subtitle2" align="center">
         Já possui cadastro ? Clique{" "}
         <Link
-          href="/login"
+          href="/auth/login"
           style={{
             textDecoration: "none",
             color: "#00875F",

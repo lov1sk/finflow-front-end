@@ -9,10 +9,14 @@ import {
   Box,
   Select,
   MenuItem,
+  Alert,
+  FormHelperText,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { registerGenders } from "@/app/utils/get-available-genders";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 const registerFormSchema = z
   .object({
     fullName: z.string().min(1, "Por Favor, insira seu nome completo"),
@@ -22,7 +26,7 @@ const registerFormSchema = z
       .refine((value) => value > 0, "Insira uma idade valida")
       .refine((value) => value >= 18, "Você precisa pelo menos ter 18 anos."),
     email: z.string().email("Insira um email valido"),
-    password: z.string().min(1, "Insira uma senha valida!"),
+    password: z.string().min(6, "Insira uma senha com pelo menos 6 caracteres"),
     confirmPassword: z.string(),
   })
   .superRefine((data, ctx) => {
@@ -38,6 +42,9 @@ const registerFormSchema = z
 type RegisterFormSchema = z.infer<typeof registerFormSchema>;
 
 export function RegisterForm() {
+  const router = useRouter();
+  const [signUpError, setSignUpError] = useState<string | null>(null);
+
   const formMethods = useForm<RegisterFormSchema>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
@@ -49,17 +56,23 @@ export function RegisterForm() {
     handleSubmit,
     register,
     control,
-    formState: { errors },
+    formState: { errors, isSubmitting: isCreatingNewUser },
   } = formMethods;
 
-  const handleSignIn = async (payload: RegisterFormSchema) =>
-    await signUp({
+  const handleSignIn = async (payload: RegisterFormSchema) => {
+    const signUpResponse = await signUp({
       age: payload.age,
       email: payload.email,
       fullName: payload.fullName,
       gender: payload.gender,
       password: payload.password,
     });
+    if (signUpResponse?.error) {
+      return setSignUpError(signUpResponse?.errorMessage ?? "");
+    }
+
+    return router.push("/auth/login");
+  };
   return (
     <form
       onSubmit={handleSubmit(handleSignIn)}
@@ -103,6 +116,9 @@ export function RegisterForm() {
               </Select>
             )}
           />
+          {errors.gender && (
+            <FormHelperText>{errors.gender.message}</FormHelperText>
+          )}
         </FormControl>
         <FormControl fullWidth>
           <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
@@ -133,6 +149,7 @@ export function RegisterForm() {
           Senha
         </Typography>
         <TextField
+          type="password"
           {...register("password")}
           error={!!errors.password}
           helperText={errors.password?.message}
@@ -144,13 +161,15 @@ export function RegisterForm() {
           Confirme a senha
         </Typography>
         <TextField
+          type="password"
           {...register("confirmPassword")}
           error={!!errors.confirmPassword}
           helperText={errors.confirmPassword?.message}
           placeholder="Repita a senha acima"
         />
       </FormControl>
-      <Button variant="contained" type="submit">
+      {signUpError && <Alert severity="error">{signUpError}</Alert>}
+      <Button variant="contained" type="submit" disabled={isCreatingNewUser}>
         Cadastrar-se
       </Button>
     </form>

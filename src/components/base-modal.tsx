@@ -1,13 +1,14 @@
-import { Box, Typography } from "@mui/material";
+import { Box, SxProps, Typography } from "@mui/material";
 import { X } from "lucide-react";
 import { ReactNode } from "react";
 
 interface BaseModalProps {
   title: string;
   children: ReactNode;
+  sx?: SxProps;
   onClose: () => void;
 }
-export function BaseModal({ title, children, onClose }: BaseModalProps) {
+export function BaseModal({ title, children, onClose, sx }: BaseModalProps) {
   return (
     <Box
       sx={{
@@ -15,15 +16,19 @@ export function BaseModal({ title, children, onClose }: BaseModalProps) {
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
-        width: "450px",
+        width: "350px",
         display: "flex",
         flexDirection: "column",
         gap: "24px",
-        paddingY: "40px",
-        paddingX: "48px",
-        backgroundColor: "#202024",
+        maxHeight: "75%",
+        overflowY: "auto",
+        paddingY: "24px",
+        paddingX: "30px",
+        backgroundColor: "#181818",
         color: "#fff",
         borderRadius: "6px",
+        boxShadow: "0 6px 15px rgba(0, 0, 0, 0.2)",
+        ...sx,
       }}
     >
       <Box

@@ -2,6 +2,8 @@
 import { appTheme } from "@/config/theme";
 import { ThemeProvider } from "@mui/material/styles";
 import "./styles.css";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -14,9 +16,15 @@ export default function RootLayout({
           padding: 0,
           margin: 0,
           boxSizing: "border-box",
+          overflowX: "hidden",
         }}
       >
-        <ThemeProvider theme={appTheme}>{children}</ThemeProvider>
+        <LocalizationProvider
+          dateAdapter={AdapterDayjs}
+          adapterLocale={"en-gb"}
+        >
+          <ThemeProvider theme={appTheme}>{children}</ThemeProvider>
+        </LocalizationProvider>
       </body>
     </html>
   );

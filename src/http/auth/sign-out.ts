@@ -1,9 +1,11 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export async function signOut() {
-  console.log({ msg: "Signout..." });
+  const cookieStore = cookies();
+  cookieStore.delete("token");
 
   redirect("/auth/login");
 }

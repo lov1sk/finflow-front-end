@@ -1,27 +1,31 @@
-import { Container } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import { Header } from "./(home)/components/header";
 import { checkAuthentication } from "@/http/auth/check-authentication";
 import { redirect } from "next/navigation";
-
-export default function AppLayout({
+import { getProfile } from "@/http/user/get-profile";
+import { Suspense } from "react";
+export default async function AppLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const isAuthenticated = checkAuthentication();
+  const isAuthenticated = await checkAuthentication();
+  console.log({ isAuthenticated });
+
   if (!isAuthenticated) redirect("/auth/login");
 
   return (
     <main
       style={{
         width: "100vw",
-        height: "100vh",
-        backgroundColor: "#121214", // Sobrescreve o fundo com essa cor
+        minHeight: "100vh",
+        backgroundColor: "#202024", // Sobrescreve o fundo com essa cor
         color: "#fff",
+        background: "linear-gradient(to bottom, #121214 187px, #202024 187px)",
       }}
     >
-      <Container>
-        <Header username={"Lucas Ribeiro"} />
+      <Container maxWidth="lg">
+        <Header />
         {children}
       </Container>
     </main>

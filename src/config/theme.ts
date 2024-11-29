@@ -23,5 +23,22 @@ export const appTheme = createTheme({
         },
       ],
     },
+    MuiPagination: {
+      styleOverrides: {
+        root: {
+          // Estilos gerais do componente Pagination
+        },
+        // Aplica cor à página ativa
+        ul: {
+          "& .MuiPaginationItem-root.Mui-selected": {
+            backgroundColor: "#015F43", // Cor de fundo verde para página ativa
+            color: "#fff", // Cor do texto para contraste
+            "&:hover": {
+              backgroundColor: "#014732", // Cor mais escura ao passar o mouse
+            },
+          },
+        },
+      },
+    },
   },
 });

@@ -18,10 +18,17 @@ function stringToColor(string: string) {
   return color;
 }
 export function stringAvatar(name: string) {
+  let children;
+  if (name.split(" ").length > 1) {
+    children = `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`;
+  } else {
+    children = `${name[0][0]}`;
+  }
+
   return {
     sx: {
       bgcolor: stringToColor(name),
     },
-    children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+    children,
   };
 }

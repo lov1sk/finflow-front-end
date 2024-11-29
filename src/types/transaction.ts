@@ -1,8 +1,15 @@
 export type Transaction = {
-  id: string;
-  name: string;
-  value: number;
+  idTransaction: string;
+  date: string; // TODO:CHECK THIS
+  description: string;
+  valueTransaction: number;
   category: string;
-  type: string;
-  userId: string;
+  typeTransaction: string;
+  idUser: string;
+  formatedDate: string;
 };
+
+export enum TransactionType {
+  CREDIT = "credit",
+  DEBIT = "debit",
+}

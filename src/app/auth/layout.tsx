@@ -1,4 +1,3 @@
-import { Box, Container } from "@mui/material";
 import { ReactNode } from "react";
 
 interface AuthLayoutProps {
@@ -12,7 +11,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
         placeContent: "center",
         backgroundColor: "#121214", // Sobrescreve o fundo com essa cor
         height: "100vh",
-        width: "100vw",
+        maxWidth: "100vw",
         overflowY: "auto",
       }}
     >

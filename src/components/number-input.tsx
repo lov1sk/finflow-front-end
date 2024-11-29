@@ -8,6 +8,7 @@ import {
 } from "react-hook-form";
 
 interface InputProps<T extends FieldValues> {
+  size?: "small" | "medium";
   placeholder: string;
   name: Path<T>;
   label: string;
@@ -15,13 +16,14 @@ interface InputProps<T extends FieldValues> {
   error?: FieldError;
   sx?: SxProps;
 }
-export function TextInput<T extends FieldValues>({
+export function NumberInput<T extends FieldValues>({
   name,
   label,
   control,
   error,
   placeholder,
   sx,
+  size = "medium",
 }: InputProps<T>) {
   return (
     <FormControl fullWidth>
@@ -30,6 +32,7 @@ export function TextInput<T extends FieldValues>({
         control={control}
         render={({ field }) => (
           <TextField
+            size={size}
             sx={{
               ...sx,
               backgroundColor: "#121214",
@@ -39,6 +42,7 @@ export function TextInput<T extends FieldValues>({
             label={label}
             placeholder={placeholder}
             helperText={error?.message}
+            type="number"
           />
         )}
       />

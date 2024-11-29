@@ -1,9 +1,18 @@
 "use client";
 import { signIn } from "@/http/auth/sign-in";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, FormControl, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Button,
+  FormControl,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { PasswordInput } from "@/components/password-input";
 
 const loginFormSchema = z.object({
   email: z.string().email("Insira um email valido"),
@@ -11,18 +20,39 @@ const loginFormSchema = z.object({
 });
 type LoginFormSchema = z.infer<typeof loginFormSchema>;
 export function LoginForm() {
+  const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(
+    undefined
+  );
+
   const formMethods = useForm<LoginFormSchema>({
     resolver: zodResolver(loginFormSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
   const {
     handleSubmit,
     register,
-    formState: { errors },
+    control,
+    formState: { errors, isSubmitting },
   } = formMethods;
 
-  const handleLogin = async (payload: LoginFormSchema) =>
-    await signIn({ email: payload.email, password: payload.password });
+  const handleLogin = async (payload: LoginFormSchema) => {
+    const response = await signIn({
+      email: payload.email,
+      password: payload.password,
+    });
+
+    if (response?.error) {
+      return setErrorMessage(response.errorMessage ?? "Erro no login");
+    }
+
+    return router.push("/");
+  };
+
   return (
     <form
       onSubmit={handleSubmit(handleLogin)}
@@ -44,19 +74,15 @@ export function LoginForm() {
           placeholder="Digite seu email"
         />
       </FormControl>
-      <FormControl fullWidth>
-        <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-          Senha
-        </Typography>
-        <TextField
-          {...register("password")}
-          error={!!errors.password}
-          helperText={errors.password?.message}
-          placeholder="Digite sua senha"
-          type="password"
-        />
-      </FormControl>
-      <Button variant="contained" type="submit">
+      <PasswordInput
+        label="Senha"
+        control={control}
+        name="password"
+        error={errors.password}
+        placeholder="Digite sua senha"
+      />
+      {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+      <Button variant="contained" type="submit" disabled={isSubmitting}>
         Entrar
       </Button>
     </form>

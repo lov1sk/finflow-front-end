@@ -5,7 +5,7 @@ import Grid from "@mui/material/Grid2";
 
 interface CardProps {
   title: string;
-  value: number;
+  value?: number;
   icon: ReactNode;
   variant?: "normal" | "green-filled";
 }
@@ -26,13 +26,17 @@ export function Card({ title, value, icon, variant }: CardProps) {
       sx={{
         ...cardStyles[variant],
         color: "#fff",
-        padding: "24px",
-        paddingLeft: "32px",
+        paddingY: "24px",
+        paddingX: "32px",
         display: "flex",
         height: "120px",
         flexDirection: "column",
         justifyContent: "space-between",
         borderRadius: "6px",
+        boxShadow: "0 6px 15px rgba(0, 0, 0, 0.2)",
+        "&:hover": {
+          opacity: "0.9",
+        },
       }}
     >
       <Stack
@@ -48,12 +52,7 @@ export function Card({ title, value, icon, variant }: CardProps) {
         {icon}
       </Stack>
 
-      <Typography
-        sx={{
-          fontSize: "28px",
-          fontWeight: "bold",
-        }}
-      >
+      <Typography variant="h5" fontWeight="bold">
         {formatToCurrency(value)}
       </Typography>
     </Grid>

@@ -2,21 +2,31 @@
 
 import { stringAvatar } from "@/app/utils/material-ui/render-avatar-name";
 import { signOut } from "@/http/auth/sign-out";
-import { Avatar, Button, Menu, MenuItem, Typography } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  Menu,
+  MenuItem,
+  Modal,
+  Typography,
+} from "@mui/material";
 import { ChevronDown, LogOut } from "lucide-react";
 import React, { useState } from "react";
+import { UserProfileModal } from "./user-modal/user-profile-modal";
+import { User } from "@/types/user";
 
 interface AvatarDropdownProps {
-  username: string;
+  user: User;
 }
-export function AvatarDropdown({ username }: AvatarDropdownProps) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+export function AvatarDropdown({ user }: AvatarDropdownProps) {
+  const [openProfileModal, setOpenProfileModal] = useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = useState(null);
 
-  const handleClick = (event: any) => {
+  const handleOpenDropdown = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleCloseDropdown = () => {
     setAnchorEl(null);
   };
 
@@ -24,7 +34,7 @@ export function AvatarDropdown({ username }: AvatarDropdownProps) {
   return (
     <>
       <Button
-        onClick={handleClick}
+        onClick={handleOpenDropdown}
         sx={{
           display: "flex",
           gap: "8px",
@@ -33,7 +43,7 @@ export function AvatarDropdown({ username }: AvatarDropdownProps) {
         }}
       >
         <Avatar
-          {...stringAvatar(username)}
+          {...stringAvatar(user.name)}
           sx={{
             bgcolor: "#181818",
             color: "#71717A",
@@ -50,7 +60,7 @@ export function AvatarDropdown({ username }: AvatarDropdownProps) {
             fontWeight: "bold",
           }}
         >
-          {username}
+          {user.name}
         </Typography>
         <ChevronDown
           strokeWidth={2.5}
@@ -65,7 +75,7 @@ export function AvatarDropdown({ username }: AvatarDropdownProps) {
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
-        onClose={handleClose}
+        onClose={handleCloseDropdown}
         sx={{ margin: 0, padding: 0 }}
       >
         <MenuItem
@@ -75,7 +85,7 @@ export function AvatarDropdown({ username }: AvatarDropdownProps) {
             borderBottom: "1px",
             borderColor: "red",
           }}
-          onClick={handleClose}
+          onClick={() => setOpenProfileModal(true)}
         >
           Ver Perfil
         </MenuItem>
@@ -97,6 +107,17 @@ export function AvatarDropdown({ username }: AvatarDropdownProps) {
           />
         </MenuItem>
       </Menu>
+      <Modal
+        open={openProfileModal}
+        onClose={() => setOpenProfileModal(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <UserProfileModal
+          user={user}
+          onClose={() => setOpenProfileModal(false)}
+        />
+      </Modal>
     </>
   );
 }

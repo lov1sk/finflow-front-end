@@ -11,17 +11,19 @@ export default function LoginPage() {
         gap: "12px",
         color: "#fff",
         width: "500px",
+        marginX: "auto",
       }}
     >
       <Logo style={{ margin: "0 auto" }} />
       <LoginForm />
       <Typography align="right">
         <Link
-          href=""
+          href="/auth/passwordRecover/recover"
           style={{
             textDecoration: "none",
             color: "#fff",
           }}
+          className="a-hover"
         >
           Esqueceu sua senha?
         </Link>
@@ -30,7 +32,8 @@ export default function LoginPage() {
       <Typography variant="subtitle2" align="center">
         Não tem cadastro ainda? Clique{" "}
         <Link
-          href="/register"
+          className="a-hover"
+          href="/auth/register"
           style={{
             textDecoration: "none",
             color: "#00875F",

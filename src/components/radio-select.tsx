@@ -25,6 +25,7 @@ interface RadioSelectProps<T extends FieldValues> {
   error?: FieldError;
   control?: Control<T>;
   sx?: SxProps;
+  radioSx?: SxProps;
   options: OptionProps[];
 }
 
@@ -33,6 +34,7 @@ export function RadioSelect<T extends FieldValues>({
   control,
   error,
   sx,
+  radioSx,
   options,
 }: RadioSelectProps<T>) {
   return (
@@ -47,22 +49,24 @@ export function RadioSelect<T extends FieldValues>({
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-between",
+              ...sx,
             }}
           >
             {options.map((option, index) => (
               <FormControlLabel
                 key={index}
                 value={option.value}
-                control={<Radio />}
+                control={<Radio sx={{ ...radioSx }} />}
                 label={option.label}
                 sx={{
                   margin: 0,
-                  backgroundColor: "#29292E",
+                  backgroundColor: "#202020",
                   border: "1px solid #181818",
                   paddingY: "8px",
                   paddingX: "30px",
                   borderRadius: "6px",
                   textAlign: "center",
+                  widht: "100%",
                 }}
               />
             ))}

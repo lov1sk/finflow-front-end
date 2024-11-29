@@ -7,7 +7,10 @@ import {
   FieldValues,
   Path,
 } from "react-hook-form";
-import { formatToCurrencyMask } from "../utils/material-ui/currency-mask";
+import {
+  formatCurrency,
+  formatToCurrencyMask,
+} from "@/app/utils/material-ui/format-to-currency-mask";
 
 interface CurrencyInputProps<T extends FieldValues> {
   name: Path<T>;
@@ -33,16 +36,17 @@ export function CurrencyInput<T extends FieldValues>({
           return (
             <TextField
               {...field}
-              sx={{
-                ...sx,
-                backgroundColor: "#121214",
-                borderRadius: "4px",
-              }}
               label={label}
               variant="outlined"
               fullWidth
-              helperText={error?.message}
-              onChange={(event) => formatToCurrencyMask(event, field)}
+              helperText={error && error.message}
+              sx={{
+                backgroundColor: "#121214",
+              }}
+              value={
+                field.value !== undefined ? formatCurrency(field.value) : ""
+              } // Formata o valor para exibição
+              onChange={(event) => formatToCurrencyMask(event, field)} // Aplica a máscara durante a mudança
             />
           );
         }}
