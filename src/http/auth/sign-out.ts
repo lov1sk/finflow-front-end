@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 
 export async function signOut() {
   const cookieStore = cookies();
-  cookieStore.delete("token");
+  cookieStore.set("token", "");
 
   redirect("/auth/login");
 }

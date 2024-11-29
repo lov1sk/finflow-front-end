@@ -14,12 +14,10 @@ export interface GetProfileResponse {
 
 interface GetProfileHttpResponse extends User {}
 export async function getProfile(): Promise<GetProfileResponse> {
-  // await new Promise((resolve) => setTimeout(resolve, 3000));
   try {
     const response = await HttpGET<GetProfileHttpResponse>(
       urls.USER.GET_PROFILE
     );
-    console.log({ response });
 
     return {
       success: true,
@@ -33,9 +31,9 @@ export async function getProfile(): Promise<GetProfileResponse> {
     };
     if (error instanceof AxiosError) {
       Object.assign(errorResponse, { errorMessage: error.response?.data });
+      console.error({ status: error.status, errorResponse });
       return errorResponse;
     }
-    console.log({ error });
     return {
       ...errorResponse,
       errorMessage: "Algum erro na hora de carregar os dados do usario",

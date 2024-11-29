@@ -19,6 +19,7 @@ export async function getTransactionsCategories(): Promise<GetTransactionsCatego
     const response = await HttpGET<GetTransactionsCategoriesHttpResponse>(
       urls.TRANSACTIONS.GET_CATEGORIES
     );
+    console.log({ response });
 
     return {
       success: true,
@@ -29,6 +30,7 @@ export async function getTransactionsCategories(): Promise<GetTransactionsCatego
     const errorResponse = { success: false, error: true };
     if (error instanceof AxiosError) {
       Object.assign(errorResponse, { errorMessage: error.response?.data });
+      console.error({ status: error.status, errorResponse });
       return errorResponse;
     }
 

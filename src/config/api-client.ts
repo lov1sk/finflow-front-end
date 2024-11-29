@@ -10,6 +10,7 @@ export const apiClient = axios.create({
 checkAuthentication()
   .then((res) => {
     const jwtToken = getToken()?.value;
+    console.log({ jwtToken });
     if (jwtToken && res) {
       apiClient.defaults.headers.common.Authorization = `Bearer ${jwtToken}`;
     } else {

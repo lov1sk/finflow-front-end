@@ -14,7 +14,6 @@ interface HomePageProps {
   }>;
 }
 
-export const revalidate = 100;
 export default async function HomePage(props: HomePageProps) {
   const searchParams = await props.searchParams;
   const { data, error, errorMessage } = await getTransactions({

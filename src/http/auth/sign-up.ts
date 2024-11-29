@@ -41,6 +41,7 @@ export async function signUp({
 
     if (error instanceof AxiosError) {
       Object.assign(errorResponse, { errorMessage: error.response?.data });
+      console.error({ status: error.status, errorResponse });
       return errorResponse;
     }
 

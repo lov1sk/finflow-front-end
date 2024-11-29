@@ -26,7 +26,6 @@ export async function forgotPassword({
       urls.AUTH.PATCH_FORGOT_PASSWORD,
       forgotPasswordDto
     );
-    console.log({ response });
 
     return {
       data: response,
@@ -45,8 +44,8 @@ export async function forgotPassword({
       Object.assign(errorResponse, {
         errorMessage: error.response?.data || defaultErrorMessage,
       });
+      console.error({ status: error.status, errorResponse });
     }
-    console.log({ error, errorResponse });
 
     return errorResponse;
   }

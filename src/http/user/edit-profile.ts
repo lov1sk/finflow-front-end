@@ -41,12 +41,11 @@ export async function editUser({
       error: false,
     };
   } catch (error) {
-    console.log({ error });
     const errorResponse = {
       success: false,
       error: true,
     };
-
+    console.error({ errorResponse });
     return {
       ...errorResponse,
       errorMessage: "Ocorreu algum erro ao editar o usuario",

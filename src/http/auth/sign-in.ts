@@ -32,7 +32,6 @@ export async function signIn({
       email,
       password,
     };
-    console.log({ signInDto });
 
     const response = await HttpPOST<SignInHttpResponse>(
       urls.AUTH.POST_SIGN_IN,
@@ -40,9 +39,9 @@ export async function signIn({
     );
 
     const accessToken = response.token;
+    console.log({ accessToken });
 
     cookieStore.set("token", accessToken);
-    console.log({ accessToken });
 
     return {
       success: true,
@@ -57,6 +56,7 @@ export async function signIn({
 
     if (error instanceof AxiosError) {
       Object.assign(errorResponse, { errorMessage: error.response?.data });
+      console.error({ status: error.status, errorResponse });
       return errorResponse;
     }
 

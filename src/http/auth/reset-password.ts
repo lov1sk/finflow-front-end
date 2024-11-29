@@ -49,8 +49,8 @@ export async function resetPassword({
       Object.assign(errorResponse, {
         errorMessage: error.response?.data || defaultErrorMessage,
       });
+      console.error({ status: error.status, errorResponse });
     }
-    console.log({ error, errorResponse });
 
     return errorResponse;
   }
